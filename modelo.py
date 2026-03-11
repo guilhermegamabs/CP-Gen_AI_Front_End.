@@ -91,20 +91,21 @@ def compute_reconstruction_error(x: np.ndarray, x_recon: np.ndarray) -> float:
     # Erro MSE por imagem
     return float(np.mean((x - x_recon) ** 2))
 
-
-def classify_pneumonia(reconstruction_error: float) -> tuple:
+def classify_pneumonia(reconstruction_error: float, threshold: float) -> tuple:
     """
     Classifica se há possível pneumonia baseado no erro de reconstrução.
     Erro alto = possível pneumonia (imagem fora do padrão normal aprendido).
     """
-    # Thresholds baseados em experiência com o dataset (ajustar conforme necessário)
-    if reconstruction_error < 0.01:
+
+    # Define o limite borderline como metade do threshold total
+    borderline_limit = threshold * 0.5
+
+    if reconstruction_error < borderline_limit:
         return "NORMAL", "Baixo risco de pneumonia", "green"
-    elif reconstruction_error < 0.02:
+    elif reconstruction_error < threshold:
         return "BORDERLINE", "Risco moderado - recomenda-se avaliação médica", "orange"
     else:
         return "POSSÍVEL PNEUMONIA", "Alto risco - urgente avaliação médica", "red"
-
 
 def generate_new_images(vae: VAE, num_images: int = 4) -> np.ndarray:
     """Gera novas imagens de raio-X usando o VAE treinado."""

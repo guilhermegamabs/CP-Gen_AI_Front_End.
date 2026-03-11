@@ -30,7 +30,7 @@ def gerar_tab_home(vae):
 
                 barra_progresso.progress(80, text="Calculando erro e classificando...")
                 mse = compute_reconstruction_error(x, st.session_state["recon"])
-                classification, description, color = classify_pneumonia(mse)
+                classification, description, color = classify_pneumonia(mse, st.session_state.limite_anomalia)
 
                 barra_progresso.progress(100, text="Finalizando...")
 
